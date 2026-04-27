@@ -13,7 +13,6 @@ export default function HeroABCS() {
   const stickyInnerRef = useRef<HTMLDivElement>(null); // lo que se queda fijo (sticky)
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
-  const scrollHintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -36,51 +35,57 @@ export default function HeroABCS() {
       gsap.set(headerLogo, { opacity: 0 });
       gsap.set(heroLogo, { transformOrigin: 'center center' });
 
+      // Pre-calculate positions for the dock animation
       const getDeltas = () => {
         const heroRect = heroLogo.getBoundingClientRect();
         const headerRect = headerLogo.getBoundingClientRect();
+        
+        // We need the current transform to calculate the "real" base position
+        const style = window.getComputedStyle(heroLogo);
+        const matrix = new DOMMatrix(style.transform);
+        
+        const curX = matrix.m41;
+        const curY = matrix.m42;
+
         return {
-          x: (headerRect.left + headerRect.width / 2) - (heroRect.left + heroRect.width / 2),
-          y: (headerRect.top + headerRect.height / 2) - (heroRect.top + heroRect.height / 2),
+          x: (headerRect.left + headerRect.width / 2) - (heroRect.left - curX + heroRect.width / 2),
+          y: (headerRect.top + headerRect.height / 2) - (heroRect.top - curY + heroRect.height / 2),
           scale: headerRect.width / heroRect.width,
         };
       };
 
-      // ✅ ScrollTrigger sobre el wrapper alto, SIN pin:true
-      // El sticky lo maneja CSS — GSAP solo anima
-      ScrollTrigger.create({
-        trigger: stickyWrapRef.current,
-        start: 'top top',
-        end: 'bottom top', // cuando el wrapper sale por arriba
-        scrub: 1.2,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const p = self.progress;
-
-          // Fade out sub y hint en el primer 20%
-          gsap.set([subRef.current, scrollHintRef.current], {
-            opacity: 1 - Math.min(p / 0.2, 1),
-            y: p * -30,
-          });
-
-          // Logo vuela al header en el 100% del scroll
-          const d = getDeltas();
-          gsap.set(heroLogo, {
-            x: d.x * p,
-            y: d.y * p,
-            scale: 1 + (d.scale - 1) * p,
-          });
-
-          // Handoff al nav logo
-          if (p >= 0.98) {
-            gsap.set(heroLogo, { opacity: 0 });
-            gsap.set(headerLogo, { opacity: 1 });
-          } else {
-            gsap.set(heroLogo, { opacity: 1 });
-            gsap.set(headerLogo, { opacity: 0 });
-          }
-        },
+      // ✅ Main Scroll Timeline
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stickyWrapRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5, // Increased for more "weight" and smoothness
+          invalidateOnRefresh: true,
+        }
       });
+
+      tl.to(subRef.current, {
+        opacity: 0,
+        y: -40,
+        duration: 0.2, // Occurs in the first 20% of the scrub
+        ease: 'power2.inOut'
+      })
+      .to(heroLogo, {
+        x: () => getDeltas().x,
+        y: () => getDeltas().y,
+        scale: () => getDeltas().scale,
+        duration: 1,
+        ease: 'power3.inOut', // Organic acceleration and deceleration
+      }, 0) // Starts at 0 but the duration is longer
+      .to(heroLogo, {
+        opacity: 0,
+        duration: 0.1,
+      }, 0.9) // Fade out at the very end
+      .to(headerLogo, {
+        opacity: 1,
+        duration: 0.1,
+      }, 0.9); // Fade in the real header logo at the same time
     });
 
     const handleResize = () => ScrollTrigger.refresh();
@@ -117,12 +122,6 @@ export default function HeroABCS() {
           >
             CREATIVE DEVELOPER
           </p>
-        </div>
-        <div
-          ref={scrollHintRef}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-60 text-[#ff6b00] text-[10px] tracking-[0.2em] uppercase font-bold animate-pulse"
-        >
-          Scroll to explore
         </div>
       </div>
     </div>
