@@ -11,18 +11,23 @@ if (typeof window !== 'undefined') {
 }
 
 const CLIENTS = [
-  { id: 'HITSHOP', name: 'HITSHOP', image: 'https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b217360f470f1e6b16b233_1.%20Gilead_Law%20Roach_Ball_Ashley%20Brooke%20Creative.png', statement: 'Campaigns that made healthcare human again.' },
-  { id: 'HITLABS', name: 'HITLABS', image: 'https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2172b1f812a288cc9c9dc_2.%20Hulu_Trixie%20Mattel_Golden%20Girls_Ashley%20Brooke%20Creative%20Studio.png', statement: 'Launch moments that jumped off the timeline and into culture.' },
-  { id: 'KIOSKITO', name: 'KIOSKITO', image: 'https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2174185cd293af636688c_3.%20WARNER_URIAS_RAUL_WILLY%20WONKA_.jpg', statement: 'A 100-year celebration turned into a cultural roar.' },
-  { id: 'FEDERICO KAENEL', name: 'FEDERICO KAENEL', image: 'https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b20f1903725ad68784e5d6_4.%20Spotify_Maggie%20Rogers_Ashley%20Brooke%20Creative%20Studio.jpg', statement: 'Stories that made players feel something real.' },
+  { id: 'HITSHOP', name: 'HITSHOP', image: '/hitshop.jpg', url: 'https://hitshop.vercel.app/', statement: 'Campaigns that made healthcare human again.' },
+  { id: 'HITLABS', name: 'HITLABS', image: '/hitlabs.png', url: 'https://hitlabs.vercel.app/', statement: 'Launch moments that jumped off the timeline and into culture.' },
+  { id: 'KIOSKITO', name: 'KIOSKITO', image: '/kioskito.jpg', url: 'https://kioskito-web.vercel.app/', statement: 'A 100-year celebration turned into a cultural roar.' },
+  { id: 'FEDERICO KAENEL', name: 'FEDERICO KAENEL', image: '/fkstudio.png', url: 'https://federicokaenel.vercel.app/', statement: 'Stories that made players feel something real.' },
 ];
 
 export default function Clients() {
   const [activeClient, setActiveClient] = useState(CLIENTS[0].id);
   const containerRef = useRef<HTMLElement>(null);
 
-  const handleActivate = (clientId: string) => {
+const handleActivate = (clientId: string, openUrl: boolean = false) => {
     setActiveClient(clientId);
+    
+    const client = CLIENTS.find(c => c.id === clientId);
+    if (client?.url && openUrl) {
+      window.open(client.url, '_blank');
+    }
     
     const images = gsap.utils.toArray<HTMLElement>('.client-img-item');
     images.forEach((img) => {
@@ -36,74 +41,8 @@ export default function Clients() {
     });
   };
 
-  useGSAP(() => {
-    // Heading animation - words appear one by one
-    gsap.fromTo(
-      ".clients__heading, .clients__trusted-row span, .clients__trusted-row p",
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: ".clients__heading-wrap",
-          start: "top 80%",
-        },
-      }
-    );
-
-    // Description grid animation
-    gsap.fromTo(
-      ".clients__desc",
-      { opacity: 0, y: 40 },
-      {
-        opacity: 0.6,
-        y: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".clients__desc-grid",
-          start: "top 85%",
-        },
-      }
-    );
-
-    // Client names animation (staggered)
-    gsap.fromTo(
-      ".client-name-item",
-      { opacity: 0, x: -20 },
-      {
-        opacity: 0.25,
-        x: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".clients__names",
-          start: "top 85%",
-        },
-      }
-    );
-
-    // Statements animation
-    gsap.fromTo(
-      ".client-statement",
-      { opacity: 0, y: 20 },
-      {
-        opacity: 0.7,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".clients__statements",
-          start: "top 85%",
-        },
-      }
-    );
-
+useGSAP(() => {
+    // Show first client
     handleActivate(CLIENTS[0].id);
   }, { scope: containerRef });
 
@@ -137,6 +76,7 @@ export default function Clients() {
               key={client.id}
               className={`client-name-item js-client ${activeClient === client.id ? 'is-active' : ''}`}
               onMouseEnter={() => handleActivate(client.id)}
+              onClick={() => handleActivate(client.id, true)}
               data-client={client.id}
             >
               <span>{client.name}</span>
