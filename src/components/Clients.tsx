@@ -101,16 +101,16 @@ export default function Clients() {
       <div ref={stickyRef} className="h-screen w-full flex items-center justify-center">
         <div className="container mx-auto px-6 md:px-24">
           
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] items-center gap-12 md:gap-24 relative">
+          <div className="grid grid-cols-1 md:grid-cols-[120px_1fr_320px] items-center gap-12 md:gap-16 relative">
             
             {/* Columna Izquierda: Etiqueta Sutil */}
-            <div className="flex justify-start md:justify-end">
-              <span className="text-[11px] uppercase tracking-[0.5em] text-gray-400 font-bold whitespace-nowrap opacity-60">
+            <div className="flex justify-start md:justify-end items-start h-full pt-[25vh]">
+              <span className="text-[10px] uppercase tracking-[0.4em] text-gray-400 font-bold whitespace-nowrap opacity-60 md:rotate-[-90deg] md:origin-right md:translate-y-12">
                 The brands that bet on us
               </span>
             </div>
 
-            {/* Columna Derecha: Lista de Marcas (Peso Visual) */}
+            {/* Columna Central: Lista de Marcas */}
             <div className="relative">
               <ul 
                 ref={listRef} 
@@ -119,30 +119,37 @@ export default function Clients() {
                 {CLIENTS.map((client, index) => (
                   <li 
                     key={index} 
-                    className="client-name text-6xl md:text-[10rem] font-black leading-[0.9] tracking-tighter py-4 select-none"
+                    className="client-name text-5xl md:text-[7.5rem] font-black leading-[0.9] tracking-tighter py-4 select-none"
                   >
                     {client.name}
                   </li>
                 ))}
               </ul>
+            </div>
 
-              {/* Media Flotante (Se muestra junto a la lista) */}
-              <div className="absolute top-1/2 -right-12 md:-right-24 -translate-y-1/2 w-48 md:w-72 pointer-events-none z-0">
+            {/* Columna Derecha: Media (Espacio dedicado) */}
+            <div className="relative h-[50vh] md:h-[70vh] flex items-center">
+              <div className="w-full pointer-events-none">
                 {CLIENTS.map((client, index) => (
                   <div 
                     key={index} 
-                    className="client-media absolute inset-0 flex flex-col gap-4"
+                    className="client-media absolute inset-0 flex flex-col justify-center gap-6"
                   >
-                    <div className="w-full aspect-[3/4] overflow-hidden rounded-sm shadow-xl grayscale hover:grayscale-0 transition-all">
+                    <div className="w-full aspect-[3/4] overflow-hidden rounded-sm shadow-2xl grayscale hover:grayscale-0 transition-all">
                       <img 
                         src={client.image} 
                         alt={client.name} 
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <p className="text-[10px] text-gray-400 leading-relaxed max-w-[180px] font-medium uppercase tracking-wider">
-                      {client.description}
-                    </p>
+                    <div className="space-y-2">
+                      <p className="text-[10px] text-gray-900 font-bold uppercase tracking-widest">
+                        {client.name}
+                      </p>
+                      <p className="text-[10px] text-gray-400 leading-relaxed max-w-[200px] font-medium uppercase tracking-wider">
+                        {client.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
