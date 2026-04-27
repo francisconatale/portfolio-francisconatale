@@ -16,7 +16,7 @@ const Navbar = () => {
 
   useGSAP(() => {
     if (isHome) {
-      // En la Home: Ocultar al inicio y mostrar al pasar el Hero
+      // En la Home: Ocultar al inicio y mostrar solo al llegar a Clarity
       gsap.fromTo("#nav-logo", 
         { autoAlpha: 0, y: -10 },
         { 
@@ -24,8 +24,8 @@ const Navbar = () => {
           y: 0,
           duration: 0.4,
           scrollTrigger: {
-            trigger: "#hero",
-            start: "bottom 10%", // Aparece cuando el fondo del hero casi sale de la pantalla
+            trigger: "#clarity",
+            start: "top 80%", // Aparece cuando Clarity entra en pantalla
             toggleActions: "play none none reverse",
           }
         }
@@ -59,14 +59,6 @@ const Navbar = () => {
             Profile & Stack
           </Link>
         </div>
-        <a 
-          href="/francisconatale_curriculumvitae.pdf" 
-          target="_blank"
-          rel="noreferrer"
-          className="px-6 py-2 border border-[#ff6b00] text-[#ff6b00] font-bold text-[10px] tracking-widest uppercase hover:bg-[#ff6b00] hover:text-black transition-all duration-300 rounded-full"
-        >
-          CV
-        </a>
       </div>
     </nav>
   );
