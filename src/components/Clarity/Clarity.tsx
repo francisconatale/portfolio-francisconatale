@@ -17,81 +17,116 @@ const Clarity = () => {
   const zoomPlusRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    if (!containerRef.current || !textRef.current || !plusRef.current || !zoomPlusRef.current) return;
+    console.log('Clarity useGSAP running');
+    if (!containerRef.current || !textRef.current || !plusRef.current || !zoomPlusRef.current) {
+      console.log('Refs missing:', { 
+        container: !!containerRef.current, 
+        text: !!textRef.current, 
+        plus: !!plusRef.current,
+        zoomPlus: !!zoomPlusRef.current 
+      });
+      return;
+    }
 
+    const meshCanvas = document.querySelector('.mesh-canvas');
+    const container = containerRef.current;
+    const zoomPlus = zoomPlusRef.current;
+    const text = textRef.current;
+
+    // Get center of inline "+" relative to the pinned section (absolute coords)
     const getPlusCenter = () => {
-      if (!plusRef.current) return { x: 0, y: 0 };
-      const rect = plusRef.current.getBoundingClientRect();
+      const sectionRect = container.getBoundingClientRect();
+      const plusRect = plusRef.current!.getBoundingClientRect();
       return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
+        x: plusRect.left + plusRect.width / 2 - sectionRect.left,
+        y: plusRect.top + plusRect.height / 2 - sectionRect.top,
       };
     };
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "+=150%", // Reduced from 300% to make it feel faster
-        pin: true,
-        scrub: 0.5, // Faster scrub response
-        invalidateOnRefresh: true,
-        onRefresh: () => {
-          const center = getPlusCenter();
-          gsap.set(zoomPlusRef.current, { x: center.x, y: center.y });
-        }
-      }
-    });
-
-    // Initial setup
-    tl.set(zoomPlusRef.current, {
-      x: () => getPlusCenter().x,
-      y: () => getPlusCenter().y,
+    // Initial state
+    gsap.set(zoomPlus, {
+      visibility: 'hidden',
+      scale: 0,
+      opacity: 1,
       xPercent: -50,
       yPercent: -50,
-      scale: 0, 
-      opacity: 1,
-      visibility: "visible"
+    });
+    gsap.set(text, { clipPath: 'inset(0 100% 0 0)', opacity: 0 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container,
+        start: 'top top',
+        end: '+=150%',
+        pin: true,
+        scrub: 0.6,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          const c = getPlusCenter();
+          gsap.set(zoomPlus, { x: c.x, y: c.y });
+        },
+        onEnter: () => {
+          const c = getPlusCenter();
+          gsap.set(zoomPlus, { x: c.x, y: c.y, visibility: 'visible', scale: 0 });
+        },
+        onLeaveBack: () => {
+          // Full reset when scrolling back above
+          gsap.set(zoomPlus, { visibility: 'hidden', scale: 0 });
+          gsap.set(container, { opacity: 1, backgroundColor: '#0f0f11' });
+          gsap.set(text, { clipPath: 'inset(0 100% 0 0)', opacity: 0, color: '#ffffff' });
+          // Reset cross color
+          const bars = zoomPlus.querySelectorAll('div');
+          bars.forEach(b => (b as HTMLElement).style.backgroundColor = '#ffffff');
+          document.body.classList.remove('light-theme');
+          if (meshCanvas) gsap.set(meshCanvas, { opacity: 1 });
+        },
+      },
     });
 
-    // 1. Reveal Text
-    tl.fromTo(textRef.current,
+    // 1. Snap cross to inline "+" position
+    tl.set(zoomPlus, {
+      x: () => getPlusCenter().x,
+      y: () => getPlusCenter().y,
+      scale: 0,
+      opacity: 1,
+      visibility: 'visible',
+    });
+
+    // 2. Reveal text (clip-path wipe)
+    tl.fromTo(
+      text,
       { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
       { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.8, ease: 'power2.out' }
     );
 
-    // 2. Zoom the PLUS
-    tl.to(zoomPlusRef.current, {
-      scale: 250, 
-      duration: 2, // Reduced from 4
-      ease: "power2.in",
-    }, "-=0.2");
+    // 3. Expand solid cross — solid divs scale perfectly, zero distortion
+    tl.to(zoomPlus, { scale: 80, duration: 2, ease: 'power2.in' }, '-=0.2');
 
-    // 3. Change Body Theme & Fade Clarity Background simultaneously
-    tl.to('body', {
-      onStart: () => {
-        document.body.classList.add('light-theme');
-        gsap.to('.mesh-canvas', { opacity: 0, duration: 0.3 });
+    // 4. Theme flip at midpoint of expansion
+    tl.add('themeChange', '-=0.8');
+
+    tl.to(
+      {},
+      {
+        duration: 0.01,
+        onStart: () => document.body.classList.add('light-theme'),
+        onReverseComplete: () => document.body.classList.remove('light-theme'),
       },
-      onReverseComplete: () => {
-        document.body.classList.remove('light-theme');
-        gsap.to('.mesh-canvas', { opacity: 0.6, duration: 0.3 });
-      },
-      duration: 0.1
-    }, ">-0.2");
+      'themeChange'
+    );
 
-    tl.to(containerRef.current, {
-      backgroundColor: '#ffffff',
-      duration: 0.2
-    }, "<");
+    if (meshCanvas) {
+      tl.to(meshCanvas, { opacity: 0, duration: 0.3 }, 'themeChange');
+    }
 
-    // 4. Fade out the zoom-plus and the original text quickly
-    tl.to([zoomPlusRef.current, textRef.current], {
-      opacity: 0,
-      duration: 0.4, // Reduced from 0.8
-      ease: "power1.inOut"
-    }, ">");
+    tl.to(container, { backgroundColor: '#ffffff', duration: 0.3 }, 'themeChange');
+    tl.to(text, { color: '#0f0f11', duration: 0.3 }, 'themeChange');
 
+    // 5. Fade out content + section
+    tl.to(text, { opacity: 0, duration: 0.4, ease: 'power1.inOut' }, '+=0.1');
+    tl.to(container, { opacity: 0, duration: 0.4 }, '<');
+
+    // 6. Final hold
     tl.to({}, { duration: 0.5 });
 
   }, { scope: containerRef });
@@ -105,7 +140,16 @@ const Clarity = () => {
           <span className="word">PERFORMANCE</span>
         </p>
       </div>
-      <div className="zoom-plus" ref={zoomPlusRef}>+</div>
+
+      {/*
+        Solid CSS cross shape — NOT a text character.
+        Two rectangular divs rotated 90° form a perfect "+".
+        Scales to any size without font hinting, subpixel, or rasterization artifacts.
+      */}
+      <div className="zoom-plus" ref={zoomPlusRef}>
+        <div className="zoom-plus__h" />
+        <div className="zoom-plus__v" />
+      </div>
     </section>
   );
 };

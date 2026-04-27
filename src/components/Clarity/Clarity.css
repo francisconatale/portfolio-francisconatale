@@ -1,13 +1,13 @@
 .clarity-section {
-  background: #0f0f11; /* Use hardcoded dark background initially */
+  background: #0f0f11;
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
-  z-index: 50; 
+  z-index: 50;
 }
 
 .clarity-inner {
@@ -28,12 +28,12 @@
   text-transform: uppercase;
   letter-spacing: -0.01em;
   line-height: 1;
-  color: #ffffff; /* Keep it white always in this section */
+  color: #ffffff;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   column-gap: 0.3em;
   row-gap: 0.2em;
   width: 100%;
@@ -46,30 +46,60 @@
 }
 
 .plus {
-  color: #ffffff; /* Keep it white always in this section */
+  color: #ffffff;
   display: inline-block;
   line-height: 1;
   padding: 0 0.1em;
   position: relative;
 }
 
-/* The global zoom effect using a PLUS symbol */
+/* ─── Zoom cross wrapper ────────────────────────────────────────────────────
+   position: absolute so it lives inside the pinned section.
+   GSAP sets x/y via transform; top/left are irrelevant.
+   overflow: visible is critical — clipping would create the "box" artifact.
+   ─────────────────────────────────────────────────────────────────────────── */
 .zoom-plus {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  font-family: var(--font-display);
-  font-size: 150px; 
-  font-weight: 900;
-  color: #ffffff; /* Use hardcoded white to prevent flipping when theme changes */
-  line-height: 1;
+  width: 0;
+  height: 0;
   pointer-events: none;
-  z-index: 10000; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 100;
   visibility: hidden;
   will-change: transform;
+  overflow: visible;
+}
+
+/* ─── Solid rectangular bars that form the "+" ──────────────────────────────
+   Using actual divs instead of a text glyph means:
+   • No font rendering / hinting artifacts at large scales
+   • No subpixel rounding that causes the "chunky pixel" look
+   • Perfect hard edges at any scale
+   The size here (100px × 30px) is the BASE size before GSAP scale is applied.
+   Keep the aspect ratio of your original font's "+" character for visual match.
+   ─────────────────────────────────────────────────────────────────────────── */
+.zoom-plus__h,
+.zoom-plus__v {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 0;
+}
+
+/* Horizontal bar */
+.zoom-plus__h {
+  width: 100px;
+  height: 30px;
+  top: -15px;   /* center vertically:  -height/2 */
+  left: -50px;  /* center horizontally: -width/2  */
+}
+
+/* Vertical bar */
+.zoom-plus__v {
+  width: 30px;
+  height: 100px;
+  top: -50px;   /* center vertically:  -height/2 */
+  left: -15px;  /* center horizontally: -width/2  */
 }
 
 @media (max-width: 768px) {
