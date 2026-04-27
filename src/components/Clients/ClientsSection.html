@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clients Section Component</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+
+  <!-- External Styles -->
+  <link rel="stylesheet" href="ClientsSection.css">
+
+  <!-- GSAP Library (Required for the JS to work) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <section class="clients" id="work">
+    <div class="clients__heading-wrap" id="clientsHeading">
+      <p class="clients__heading">Most of our client work comes from</p>
+      <div class="clients__trusted-row">
+        <p class="clients__heading">Trusted</p>
+        <span class="clients__referrals-word">Referrals</span>
+      </div>
+    </div>
+
+    <div class="clients__desc-grid">
+      <p class="clients__desc">That's how a studio that stayed off the grid found success: through trust, consistency, and a shared ethos.<br/><br/>We're partners who are curious, transparent, ambitious, and passionate.</p>
+      <p class="clients__desc">Project to project, referral after referral, we meet people where they are.<br/><br/>…collaborating at the right time, for the right reasons. Do good work. Let the work sell itself.</p>
+    </div>
+
+    <div class="clients__list-wrap">
+      <div class="clients__label">The brands that bet on us</div>
+
+      <div class="clients__names">
+        <div class="client-name js-client" data-client="Gilead"><span>Gilead</span></div>
+        <div class="client-name js-client" data-client="Hulu"><span>Hulu</span></div>
+        <div class="client-name js-client" data-client="Warner"><span>Warner</span></div>
+        <div class="client-name js-client" data-client="Spotify"><span>Spotify</span></div>
+        <div class="client-name js-client" data-client="Sony"><span>Sony</span></div>
+        <div class="client-name js-client" data-client="Coachella"><span>Coachella</span></div>
+        <div class="client-name js-client" data-client="Art Basel"><span>Art Basel</span></div>
+        <div class="client-name js-client" data-client="Fendi"><span>Fendi</span></div>
+        <div class="client-name js-client" data-client="Meta"><span>Meta</span></div>
+        <div class="client-name js-client" data-client="Google"><span>Google</span></div>
+      </div>
+
+      <div class="clients__image-panel">
+        <div class="client-img-item" data-for="Gilead"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b217360f470f1e6b16b233_1.%20Gilead_Law%20Roach_Ball_Ashley%20Brooke%20Creative.png" alt="Gilead"/></div>
+        <div class="client-img-item" data-for="Hulu"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2172b1f812a288cc9c9dc_2.%20Hulu_Trixie%20Mattel_Golden%20Girls_Ashley%20Brooke%20Creative%20Studio.png" alt="Hulu"/></div>
+        <div class="client-img-item" data-for="Warner"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2174185cd293af636688c_3.%20WARNER_URIAS_RAUL_WILLY%20WONKA_.jpg" alt="Warner"/></div>
+        <div class="client-img-item" data-for="Spotify"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b20f1903725ad68784e5d6_4.%20Spotify_Maggie%20Rogers_Ashley%20Brooke%20Creative%20Studio.jpg" alt="Spotify"/></div>
+        <div class="client-img-item" data-for="Sony"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b20f48f81387a52351530c_5.%20Sony_Comic-Con_Twisted%20Metal_Ashley%20Brooke%20Creative%2002.jpg" alt="Sony"/></div>
+        <div class="client-img-item" data-for="Coachella"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b217554706f8322dad94fb_6.%20Coachella_Moschino_Katy%20Perry_Ashley%20Brooke%20Creative.jpg" alt="Coachella"/></div>
+        <div class="client-img-item" data-for="Art Basel"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2175f88a0c1cf49feaf33_7.%20Art%20Basel_FRKO_The%20Fader_Ashley%20Brooke%20Creative.png" alt="Art Basel"/></div>
+        <div class="client-img-item" data-for="Fendi"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2123132ca7b446b7595cd_8.%20Fendi_Boiler%20Room%20TV_Ashley%20Brooke%20Creative.jpg" alt="Fendi"/></div>
+        <div class="client-img-item" data-for="Meta"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b2123cc7fe0d9cbdae2372_9.%20Meta_Angelica%20Ross_Ashley%20Brooke%20Creative_.jpg" alt="Meta"/></div>
+        <div class="client-img-item" data-for="Google"><img src="https://cdn.prod.website-files.com/69aaebc8b2af8386b44dc29a/69b21245779e7fc93bcdbdd7_10.%20Google-Ashley-Brooke-Afrotech-2022.jpg" alt="Google"/></div>
+      </div>
+
+      <div class="clients__statements">
+        <div class="client-statement" data-for="Gilead">Campaigns that made healthcare human again.</div>
+        <div class="client-statement" data-for="Hulu">Launch moments that jumped off the timeline and into culture.</div>
+        <div class="client-statement" data-for="Warner">A 100-year celebration turned into a cultural roar.</div>
+        <div class="client-statement" data-for="Spotify">Playlists and fans pulled into one louder conversation.</div>
+        <div class="client-statement" data-for="Sony">Campaigns designed to move faster than the algo.</div>
+        <div class="client-statement" data-for="Coachella">A desert reimagined as a brand curators' playground.</div>
+        <div class="client-statement" data-for="Art Basel">Immersive experiences rooted in the magic of art and creativity.</div>
+        <div class="client-statement" data-for="Fendi">Cultural stories that strut beyond the runway.</div>
+        <div class="client-statement" data-for="Meta">Shifting brands from empty metrics to meaningful communities.</div>
+        <div class="client-statement" data-for="Google">Innovation translated into a story people could touch.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- External Logic -->
+  <script src="ClientsSection.js" defer></script>
+</body>
+</html>

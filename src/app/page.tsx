@@ -1,19 +1,29 @@
-import HeroABCS from "@/components/HeroABCS";
-import GiantTextScroll from "@/components/GiantTextScroll";
-import Clients from "@/components/Clients";
-import RotatingText from "@/components/RotatingText";
+import Hero from "@/components/Hero/Hero";
+import Strategy from "@/components/Strategy/Strategy";
+import Clarity from "@/components/Clarity/Clarity";
 import MeshBackground from "@/components/MeshBackground";
-import PerspectiveProjectGrid from "@/components/PerspectiveProjectGrid";
+import ContactSection from "@/components/ContactSection";
+import Clients from "@/components/Clients";
 
 export default function Page() {
   return (
     <main className="min-h-screen">
       <MeshBackground />
-      <HeroABCS />
-      <PerspectiveProjectGrid />
-      <GiantTextScroll />
+      
+      {/* Hero Section - Headline + CV Immediate Action */}
+      <Hero />
+
+      {/* Strategy Section - How I approach projects */}
+      <Strategy />
+
+      {/* Clarity Section - Identity Statement */}
+      <Clarity />
+      
+      {/* Social Proof - Clients & Brands */}
       <Clients />
-      <RotatingText />
+      
+      {/* Contact Section - CTAs + Form */}
+      <ContactSection />
     </main>
   );
 }

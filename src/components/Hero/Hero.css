@@ -1,0 +1,121 @@
+#hero {
+  position: relative;
+  min-height: 100vh;
+  background: var(--black);
+  padding: var(--nav-h) clamp(24px, 4vw, 60px) 100px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-line {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 10vw, 160px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -2px;
+  color: var(--white);
+  overflow: hidden;
+  display: block;
+}
+
+.hero-sidebar {
+  position: absolute;
+  right: clamp(24px, 4vw, 60px);
+  bottom: 160px;
+  max-width: 320px;
+  z-index: 1;
+}
+
+.hero-about { display: flex; flex-direction: column; gap: 16px; }
+
+.hero-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.hero-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #aaa;
+}
+
+.hero-stats {
+  display: flex;
+  gap: clamp(24px, 4vw, 60px);
+  align-items: flex-end;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 20px;
+}
+
+.stat { display: flex; flex-direction: column; gap: 4px; }
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 48px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.stat-plus {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw, 32px);
+  font-weight: 900;
+}
+
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* Grid Overlay */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-col {
+  border-right: 1px solid var(--grid-line);
+}
+.grid-col:first-child { border-left: 1px solid var(--grid-line); }
+
+/* Buttons */
+.btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 10px 0;
+  border-bottom: 1px solid currentColor;
+  width: fit-content;
+  transition: gap 0.3s ease;
+  cursor: pointer;
+}
+.btn-arrow:hover { gap: 16px; }
+.btn-arrow .arrow-icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
