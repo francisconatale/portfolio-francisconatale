@@ -21,27 +21,6 @@ export default function Clients() {
   const [activeClient, setActiveClient] = useState(CLIENTS[0].id);
   const containerRef = useRef<HTMLElement>(null);
 
-  useGSAP(() => {
-    // Heading animation
-    gsap.fromTo(
-      ".clients__heading-wrap",
-      { scale: 0.92, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: ".clients__heading-wrap",
-          start: "top 80%",
-        },
-      }
-    );
-
-    // Initial activation
-    handleActivate(CLIENTS[0].id);
-  }, { scope: containerRef });
-
   const handleActivate = (clientId: string) => {
     setActiveClient(clientId);
     
@@ -56,6 +35,77 @@ export default function Clients() {
       });
     });
   };
+
+  useGSAP(() => {
+    // Heading animation - words appear one by one
+    gsap.fromTo(
+      ".clients__heading, .clients__trusted-row span, .clients__trusted-row p",
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: ".clients__heading-wrap",
+          start: "top 80%",
+        },
+      }
+    );
+
+    // Description grid animation
+    gsap.fromTo(
+      ".clients__desc",
+      { opacity: 0, y: 40 },
+      {
+        opacity: 0.6,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".clients__desc-grid",
+          start: "top 85%",
+        },
+      }
+    );
+
+    // Client names animation (staggered)
+    gsap.fromTo(
+      ".client-name-item",
+      { opacity: 0, x: -20 },
+      {
+        opacity: 0.25,
+        x: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".clients__names",
+          start: "top 85%",
+        },
+      }
+    );
+
+    // Statements animation
+    gsap.fromTo(
+      ".client-statement",
+      { opacity: 0, y: 20 },
+      {
+        opacity: 0.7,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".clients__statements",
+          start: "top 85%",
+        },
+      }
+    );
+
+    handleActivate(CLIENTS[0].id);
+  }, { scope: containerRef });
 
   return (
     <section className="clients" id="work" ref={containerRef}>

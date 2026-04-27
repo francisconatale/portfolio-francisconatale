@@ -99,35 +99,34 @@ const Clarity = () => {
       { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.8, ease: 'power2.out' }
     );
 
-    // 3. Expand solid cross — solid divs scale perfectly, zero distortion
+// 3. Expand solid cross
     tl.to(zoomPlus, { scale: 80, duration: 2, ease: 'power2.in' }, '-=0.2');
 
-    // 4. Theme flip at midpoint of expansion
-    tl.add('themeChange', '-=0.8');
+    // 4. Theme flip - after expansion, no transitions
+    tl.add('themeChange');
 
-    tl.to(
-      {},
-      {
-        duration: 0.01,
-        onStart: () => document.body.classList.add('light-theme'),
-        onReverseComplete: () => document.body.classList.remove('light-theme'),
+    tl.to({}, {
+      duration: 0,
+      onStart: () => {
+        document.body.classList.add('light-theme');
+        if (meshCanvas) gsap.set(meshCanvas, { opacity: 0 });
       },
-      'themeChange'
-    );
+      onReverseComplete: () => {
+        document.body.classList.remove('light-theme');
+      }
+    }, 'themeChange');
 
-    if (meshCanvas) {
-      tl.to(meshCanvas, { opacity: 0, duration: 0.3 }, 'themeChange');
-    }
+    tl.set(container, { backgroundColor: '#ffffff' });
+    tl.set(text, { color: '#0f0f11' });
 
-    tl.to(container, { backgroundColor: '#ffffff', duration: 0.3 }, 'themeChange');
-    tl.to(text, { color: '#0f0f11', duration: 0.3 }, 'themeChange');
-
-    // 5. Fade out content + section
-    tl.to(text, { opacity: 0, duration: 0.4, ease: 'power1.inOut' }, '+=0.1');
-    tl.to(container, { opacity: 0, duration: 0.4 }, '<');
+    // 5. Fade out text only, keep background white
+    tl.to(text, { opacity: 0, duration: 0.3, ease: 'power1.inOut' }, '+=0.1');
+    
+    // Container stays visible with white background
+    tl.set(container, { opacity: 1 });
 
     // 6. Final hold
-    tl.to({}, { duration: 0.5 });
+    tl.to({}, { duration: 0.1 });
 
   }, { scope: containerRef });
 

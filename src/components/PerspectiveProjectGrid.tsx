@@ -67,7 +67,7 @@ export default function PerspectiveProjectGrid() {
   }, []);
 
   return (
-    <section id="projects" ref={containerRef} className="py-48 px-6 md:px-24 bg-[var(--background)] overflow-hidden">
+<section id="projects" ref={containerRef} className="py-48 px-6 md:px-24 bg-[var(--background)] overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <header className="mb-32 flex flex-col md:flex-row items-baseline gap-8 border-b border-[var(--white)]/10 pb-12">
           <h2 className="text-6xl md:text-[9rem] font-bold text-[var(--white)] tracking-tighter uppercase leading-none" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
