@@ -21,7 +21,6 @@ const Footer = () => {
         
         <div className="mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[8px] uppercase tracking-[0.2em] text-white/10 font-bold">
           <p>&copy; {new Date().getFullYear()} Francisco Natale — Portfolio Estratégico.</p>
-          <p className="tracking-[0.4em]">Hecho con Next.js & GSAP</p>
         </div>
       </div>
     </footer>

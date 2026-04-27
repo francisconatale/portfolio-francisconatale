@@ -3,26 +3,63 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function PremiumLoader() {
+type LoaderDirection = 'up' | 'down' | 'left' | 'right' | 'fade' | 'random';
+
+interface PremiumLoaderProps {
+  direction?: LoaderDirection;
+  color?: string;
+}
+
+export default function PremiumLoader({ 
+  direction = 'random', 
+  color = "#ff6b00" 
+}: PremiumLoaderProps) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (loaderRef.current) {
       const tl = gsap.timeline();
 
-      // Animación premium: Desliza hacia arriba con un easing elegante
-      tl.to(loaderRef.current, {
-        yPercent: -100,
-        duration: 0.7,
+      let vars: gsap.TweenVars = {
+        duration: 0.8,
         ease: "power4.inOut",
-        delay: 0.2, // Reducido para mayor agilidad
+        delay: 0.1,
         onComplete: () => {
-          // Opcional: Eliminar del DOM o esconder para que no interfiera con clics
           if (loaderRef.current) loaderRef.current.style.display = "none";
         },
-      });
+      };
+
+      // Si es random, elegimos una dirección al azar (solo en el cliente para evitar hidratación errónea)
+      let finalDirection = direction;
+      if (finalDirection === 'random') {
+        const directions: ('up'|'down'|'left'|'right'|'fade')[] = ['up', 'down', 'left', 'right', 'fade'];
+        finalDirection = directions[Math.floor(Math.random() * directions.length)];
+      }
+
+      // Parametrización de la salida
+      switch (finalDirection) {
+        case 'down':
+          vars.yPercent = 100;
+          break;
+        case 'left':
+          vars.xPercent = -100;
+          break;
+        case 'right':
+          vars.xPercent = 100;
+          break;
+        case 'fade':
+          vars.autoAlpha = 0;
+          vars.scale = 1.1;
+          break;
+        case 'up':
+        default:
+          vars.yPercent = -100;
+          break;
+      }
+
+      tl.to(loaderRef.current, vars);
     }
-  }, []);
+  }, [direction]);
 
   return (
     <div
@@ -33,14 +70,15 @@ export default function PremiumLoader() {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundColor: "#ff6b00", // Naranja premium vibrante
+        backgroundColor: color,
         zIndex: 9999,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        willChange: "transform, opacity",
       }}
     >
-      {/* Podrías añadir un logo o texto aquí en el futuro */}
+      {/* Aquí podrías poner un logo que también reaccione a la dirección */}
     </div>
   );
 }

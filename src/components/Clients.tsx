@@ -11,10 +11,10 @@ if (typeof window !== 'undefined') {
 }
 
 const CLIENTS = [
-  { id: 'HITSHOP', name: 'HITSHOP', image: '/hitshop.jpg', url: 'https://hitshop.vercel.app/', statement: 'Campaigns that made healthcare human again.' },
-  { id: 'HITLABS', name: 'HITLABS', image: '/hitlabs.png', url: 'https://hitlabs.vercel.app/', statement: 'Launch moments that jumped off the timeline and into culture.' },
-  { id: 'KIOSKITO', name: 'KIOSKITO', image: '/kioskito.jpg', url: 'https://kioskito-web.vercel.app/', statement: 'A 100-year celebration turned into a cultural roar.' },
-  { id: 'FEDERICO KAENEL', name: 'FEDERICO KAENEL', image: '/fkstudio.png', url: 'https://federicokaenel.vercel.app/', statement: 'Stories that made players feel something real.' },
+  { id: 'HITSHOP', name: 'HITSHOP', image: '/hitshop.jpg', url: 'https://hitshop.vercel.app/', statement: 'A specialized platform for buying and selling hardware components.' },
+  { id: 'HITLABS', name: 'HITLABS', image: '/hitlabs.png', url: 'https://hitlabs.vercel.app/', statement: 'Official website for my startup dedicated to software development.' },
+  { id: 'KIOSKITO', name: 'KIOSKITO', image: '/kioskito.jpg', url: 'https://kioskito-web.vercel.app/', statement: 'A comprehensive management application designed for retail businesses.' },
+  { id: 'FEDERICO KAENEL', name: 'FEDERICO KAENEL', image: '/fkstudio.png', url: 'https://federicokaenel.vercel.app/', statement: 'Professional engineering portfolio showcasing technical expertise.' },
 ];
 
 export default function Clients() {
@@ -49,26 +49,24 @@ useGSAP(() => {
   return (
     <section className="clients" id="work" ref={containerRef}>
       <div className="clients__heading-wrap">
-        <p className="clients__heading">Most of my client work comes from</p>
+        <p className="clients__heading">Technology at the</p>
         <div className="clients__trusted-row">
-          <p className="clients__heading">Trusted</p>
-          <span className="clients__referrals-word">Referrals</span>
+          <p className="clients__heading">Service of your</p>
+          <span className="clients__referrals-word">Business</span>
         </div>
       </div>
 
       <div className="clients__desc-grid">
-        <p className="clients__desc">
-          That's how I found success: through trust, consistency, and a shared ethos.<br/><br/>
-          I'm a partner who is curious, transparent, ambitious, and passionate.
+        <p className="clients__desc-large">
+          "I don't just write code — I architect digital products where security, usability, and business goals converge."
         </p>
-        <p className="clients__desc">
-          Project to project, referral after referral, I meet people where they are.<br/><br/>
-          …collaborating at the right time, for the right reasons. Do good work. Let the work sell itself.
+        <p className="clients__desc-sub">
+          Strategic engineering and full-stack adaptability at the service of your results.
         </p>
       </div>
 
       <div className="clients__list-wrap">
-        <div className="clients__label">The brands that bet on me</div>
+        <div className="clients__label">Companies and projects that trust my work</div>
 
         <div className="clients__names">
           {CLIENTS.map((client) => (
